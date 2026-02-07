@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chenla's Software Portfolio</title>
+    <style>
+        :root {
+            --brand-orange: #f26722;
+            --brand-black: #1a1a1a;
+            --brand-blue: #00a3e0;
+            --text-main: #1a1a1a;
+            --text-muted: #555555;
+            --bg-page: #ffffff;
+            --bg-sidebar: #f8f8f8;
+            --highlight: #fff0e6;
+            --border: #dddddd;
+            --sidebar-width: 320px;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Inter', system-ui, -apple-system, sans-serif;
+            color: var(--text-main);
+            background-color: var(--bg-page);
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 1240px;
+            margin: 0 auto;
+            padding: 60px 40px;
+        }
+
+        header {
+            margin-bottom: 50px;
+            border-top: 8px solid var(--brand-orange);
+            padding-top: 30px;
+            padding-bottom: 25px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            color: var(--brand-black);
+            margin: 0;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            text-transform: uppercase;
+        }
+
+        .value-statement {
+            font-size: 1.3rem;
+            font-weight: 500;
+            color: var(--brand-blue);
+            margin-top: 12px;
+            line-height: 1.4;
+            max-width: 800px;
+        }
+
+        /* Layout Grid */
+        .layout-grid {
+            display: grid;
+            grid-template-columns: var(--sidebar-width) 1fr;
+            gap: 50px;
+            align-items: start;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            position: sticky;
+            top: 40px;
+            background: var(--bg-sidebar);
+            padding: 25px;
+            border-radius: 4px;
+            border: 1px solid var(--border);
+        }
+
+        .sidebar h2 {
+            font-size: 1rem;
+            margin-top: 10px;
+            margin-bottom: 25px;
+            border-left: none !important;
+            padding-left: 0 !important;
+            color: var(--text-muted);
+            border-bottom: 2px solid var(--brand-orange);
+            padding-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            font-weight: 700;
+        }
+
+        .timeline {
+            position: relative;
+            padding-left: 24px;
+            border-left: 2px solid var(--border);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 30px;
+            cursor: pointer;
+        }
+
+        .timeline-item::before {
+            content: "";
+            position: absolute;
+            left: -32px;
+            top: 6px;
+            width: 14px;
+            height: 14px;
+            background: white;
+            border: 3px solid var(--brand-orange);
+            border-radius: 0;
+            /* Square for a more industrial feel */
+            z-index: 1;
+        }
+
+        .timeline-date {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--brand-orange);
+            text-transform: uppercase;
+        }
+
+        .timeline-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--brand-black);
+            display: block;
+            margin-top: 2px;
+        }
+
+        .timeline-summary {
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-top: 8px;
+            background: white;
+            padding: 0 12px;
+            border-left: 3px solid var(--brand-blue);
+        }
+
+        .timeline-item.expanded .timeline-summary {
+            max-height: 400px;
+            padding: 12px;
+            border: 1px solid var(--border);
+            border-left: 3px solid var(--brand-blue);
+        }
+
+        .timeline-controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+
+        .timeline-controls .tl-btn {
+            font-size: 0.75rem;
+            font-weight: 800;
+            padding: 8px 12px;
+            border-radius: 0;
+            border: 1px solid var(--brand-black);
+            background: white;
+            color: var(--brand-black);
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            transition: all 0.2s ease;
+        }
+
+        .timeline-controls .tl-btn:hover {
+            background: var(--brand-black);
+            color: white;
+        }
+
+        .role-header {
+            font-size: 0.75rem;
+            font-weight: 900;
+            color: var(--brand-black);
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            margin: 40px 0 20px -10px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .role-header::after {
+            content: "";
+            flex: 1;
+            height: 2px;
+            background: var(--brand-orange);
+        }
+
+        .status-badge {
+            font-size: 0.7rem;
+            padding: 3px 8px;
+            border-radius: 0;
+            font-weight: 800;
+            margin-left: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .status-completed {
+            background: #f1f1f1;
+            color: #666;
+            border: 1px solid #ddd;
+        }
+
+        .status-current {
+            background: var(--highlight);
+            color: var(--brand-orange);
+            border: 1px solid var(--brand-orange);
+        }
+
+        .summary-label {
+            font-weight: 800;
+            color: var(--brand-black);
+            display: block;
+            margin-top: 8px;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* Main Content Styles */
+        section {
+            background: white;
+            padding: 45px;
+            border-radius: 0;
+            border: 1px solid var(--border);
+            margin-bottom: 40px;
+            box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.03);
+            position: relative;
+        }
+
+        section::before {
+            content: "";
+            position: absolute;
+            left: -1px;
+            top: -1px;
+            width: 10px;
+            height: 100%;
+            border-left: 1px solid var(--border);
+        }
+
+        h2 {
+            font-size: 1.6rem;
+            color: var(--brand-black);
+            margin-top: 0;
+            margin-bottom: 25px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            border-left: 8px solid var(--brand-orange);
+            padding-left: 20px;
+            font-weight: 800;
+        }
+
+        .exec-summary p {
+            font-size: 1.15rem;
+            color: var(--text-main);
+            margin-bottom: 0;
+            font-weight: 400;
+        }
+
+        .pillar-meta {
+            margin-bottom: 30px;
+        }
+
+        .pillar-value {
+            font-weight: 700;
+            color: var(--brand-blue);
+            display: block;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .pillar-impact {
+            font-size: 1rem;
+            color: var(--text-muted);
+            font-style: italic;
+        }
+
+        .enabled-content {
+            background: #ffffff;
+            border: 1px solid var(--border);
+            border-top: 4px solid var(--brand-black);
+            padding: 30px;
+            margin-top: 20px;
+        }
+
+        .enabled-label {
+            font-size: 0.85rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            color: var(--brand-orange);
+            display: block;
+            margin-bottom: 15px;
+            letter-spacing: 0.15em;
+        }
+
+        .evidence-list {
+            margin-top: 25px;
+            padding-left: 0;
+            list-style: none;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .evidence-item {
+            padding: 12px;
+            background: var(--bg-sidebar);
+            border: 1px solid var(--border);
+            font-size: 0.95rem;
+        }
+
+        .evidence-title {
+            font-weight: 800;
+            color: var(--brand-black);
+            display: block;
+            margin-bottom: 4px;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+        }
+
+        .metric {
+            color: var(--brand-orange);
+            font-weight: 800;
+            text-decoration: underline;
+            text-underline-offset: 4px;
+        }
+
+        .glossary-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            font-size: 0.9rem;
+        }
+
+        .glossary-cat h3 {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            color: var(--brand-orange);
+            margin-bottom: 12px;
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 5px;
+            font-weight: 800;
+            letter-spacing: 0.1em;
+        }
+
+        .glossary-list {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .glossary-list li::after {
+            content: "•";
+            margin-left: 8px;
+            color: var(--border);
+        }
+
+        .glossary-list li:last-child::after {
+            content: "";
+        }
+
+        .closing-box {
+            border-top: 4px solid var(--brand-black);
+            padding-top: 35px;
+            font-weight: 500;
+        }
+
+        @media screen and (max-width: 900px) {
+            .layout-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                position: static;
+                order: 2;
+                margin-top: 30px;
+            }
+        }
+
+        @media print {
+            body {
+                background: white;
+                font-size: 11pt;
+            }
+
+            .container {
+                max-width: 100%;
+                padding: 0;
+            }
+
+            .layout-grid {
+                display: block;
+            }
+
+            .sidebar {
+                display: none;
+            }
+
+            section {
+                box-shadow: none;
+                break-inside: avoid;
+                border: 1px solid #eee;
+                margin-bottom: 20px;
+            }
+
+            .enabled-content {
+                background: white;
+                border: 1px solid #ddd;
+                border-top: 3px solid black;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <header>
+            <h1>Chenla Long, Jr.</h1>
+            <div class="value-statement">
+                Building scalable engineering systems that reduce operational risk and accelerate technical
+                decision-making across the fire protection lifecycle.
+            </div>
+        </header>
+
+        <div class="layout-grid">
+            <aside class="sidebar">
+                <h2>Project Timeline</h2>
+                <div class="timeline-controls">
+                    <button type="button" class="tl-btn" onclick="expandAllTimelines()">Expand All</button>
+                    <button type="button" class="tl-btn" onclick="collapseAllTimelines()">Collapse All</button>
+                </div>
+                <!-- ROLE: ENGINEER 1 -->
+                <div class="role-header">Engineer 1 (Jan 2024 – Present)</div>
+                <div class="timeline">
+
+                    <!-- V2 (Current) -->
+                    <div class="timeline-item" onclick="this.classList.toggle('expanded')">
+                        <span class="timeline-date">May 2025 – Present</span>
+                        <span class="timeline-title">
+                            Vortex Project Builder <br>(Vortex Configuration - V2)
+                            <span class="status-badge status-current">Current</span>
+                        </span>
+                        <div class="timeline-summary">
+                            <span class="summary-label">Problem:</span>
+                            Single-system tools could not scale to multi-system, multi-enclosure projects without
+                            reintroducing manual coordination and error risk.
+                            <span class="summary-label">Solution:</span>
+                            Evolved the estimator into a project-based platform supporting multiple engineered and
+                            pre-engineered systems with independent configuration and BOMs—while preserving usability
+                            under significantly increased complexity.
+                        </div>
+                    </div>
+
+                    <!-- V1 (Current) -->
+                    <div class="timeline-item" onclick="this.classList.toggle('expanded')">
+                        <span class="timeline-date">Sep 2023 – Present</span>
+                        <span class="timeline-title">
+                            Vortex Estimator Tool <br>(Vortex Configuration - V1)
+                            <span class="status-badge status-current">Current</span>
+                        </span>
+                        <div class="timeline-summary">
+                            <span class="summary-label">Problem:</span>
+                            Hand calculations and spreadsheets produced slow, inconsistent system estimates.
+                            <span class="summary-label">Solution:</span>
+                            Replaced manual sizing with a standardized single-system, multi-zone calculator—establishing
+                            a trusted baseline for feasibility, pricing, and configuration accuracy.
+                        </div>
+                    </div>
+
+                    <!-- VicFlex (Current) -->
+                    <div class="timeline-item" onclick="this.classList.toggle('expanded')">
+                        <span class="timeline-date">Early 2025 – Present</span>
+                        <span class="timeline-title">
+                            VicFlex Bracket Filter
+                            <span class="status-badge status-current">Current</span>
+                        </span>
+                        <div class="timeline-summary">
+                            <span class="summary-label">Problem:</span>
+                            Sales relied on engineering to manually validate bracket compatibility in SolidWorks.
+                            <span class="summary-label">Solution:</span>
+                            Delivered an internal sales tool with validated compatible options, constraints, distance
+                            ranges, and visuals—reducing engineering interruptions and improving response time.
+                        </div>
+                    </div>
+
+
+                    <!-- DAQ (Completed) -->
+                    <div class="timeline-item" onclick="this.classList.toggle('expanded')">
+                        <span class="timeline-date">Dec 2025</span>
+                        <span class="timeline-title">
+                            Scalable DAQ (Bechtel Customer Testing)
+                            <span class="status-badge status-completed">Completed</span>
+                        </span>
+                        <div class="timeline-summary">
+                            <span class="summary-label">Problem:</span>
+                            Discharge testing needs varied by campaign, repeatedly consuming lab resources to build
+                            custom DAQ systems.
+                            <span class="summary-label">Solution:</span>
+                            Designed a configuration-driven DAQ platform that scales across sensor types and test
+                            needs—preserving lab capacity and supporting evolving requirements ahead of UL listing
+                            efforts.
+                        </div>
+                    </div>
+
+                    <!-- Research (Completed + renamed) -->
+                    <div class="timeline-item" onclick="this.classList.toggle('expanded')">
+                        <span class="timeline-date">2024 – 2025</span>
+                        <span class="timeline-title">
+                            RG5200i Innovation Research (AI / LiDAR)
+                            <span class="status-badge status-completed">Completed</span>
+                        </span>
+                        <div class="timeline-summary">
+                            <span class="summary-label">Problem:</span>
+                            Pipe alignment verification relied on manual inspection, with uncertainty around real-time
+                            vision feasibility.
+                            <span class="summary-label">Solution:</span>
+                            Conducted feasibility research using ML (YOLOv5) and LiDAR approaches for pipe
+                            detection/alignment—reducing uncertainty and informing downstream tool development.
+                        </div>
+                    </div>
+
+                    <!-- UL Formatter (Completed) -->
+                    <div class="timeline-item" onclick="this.classList.toggle('expanded')">
+                        <span class="timeline-date">Mar 2024 – 2025</span>
+                        <span class="timeline-title">
+                            UL Formatter (v1.4)
+                            <span class="status-badge status-completed">Completed</span>
+                        </span>
+                        <div class="timeline-summary">
+                            <span class="summary-label">Problem:</span>
+                            Manual transcription of sensor data into UL reports was time-intensive and error-prone.
+                            <span class="summary-label">Solution:</span>
+                            Automated UL-compliant certification documents directly from raw test data—improving
+                            consistency, auditability, and confidence in reported results.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ROLE: INTERN -->
+                <div class="role-header">Intern (May 2023 – Dec 2023)</div>
+                <div class="timeline">
+
+                    <div class="timeline-item" onclick="this.classList.toggle('expanded')">
+                        <span class="timeline-date">May 2023 – Dec 2023</span>
+                        <span class="timeline-title">Vortex BOM Application <br>(Vortex Configuration -
+                            Prototype)</span>
+                        <div class="timeline-summary">
+                            <span class="summary-label">Problem:</span>
+                            Vortex system calculations were difficult to reason about and validate early in the design
+                            process.
+                            <span class="summary-label">Solution:</span>
+                            Built a prototype to learn calculation methods and prove feasibility—directly informing the
+                            later public Vortex Estimator Tool.
+                        </div>
+                    </div>
+
+                    <div class="timeline-item" onclick="this.classList.toggle('expanded')">
+                        <span class="timeline-date">May 2023 – Dec 2023</span>
+                        <span class="timeline-title">Stepper Motor Control Loop (Cost Reduction Research)</span>
+                        <div class="timeline-summary">
+                            <span class="summary-label">Problem:</span>
+                            The existing MDrive motor solution met requirements but carried high component cost.
+                            <span class="summary-label">Solution:</span>
+                            Implemented a PID-based C++ control loop to evaluate an in-house alternative—targeting cost
+                            reduction at the component and panel/system level.
+                        </div>
+                    </div>
+
+                    <div class="timeline-item" onclick="this.classList.toggle('expanded')">
+                        <span class="timeline-date">May 2023 – Dec 2023</span>
+                        <span class="timeline-title">Vortex R&amp;D &amp; Test DAQ Support</span>
+                        <div class="timeline-summary">
+                            <span class="summary-label">Problem:</span>
+                            R&amp;D testing required repeatable sensor setup and reliable data collection across
+                            changing test needs.
+                            <span class="summary-label">Solution:</span>
+                            Configured sensors and wiring, operated existing DAQ programs, and collected/reported data
+                            to support engineered and pre-engineered system development.
+                        </div>
+                    </div>
+                </div>
+
+            </aside>
+
+            <main class="main-content">
+                <!-- EXECUTIVE SUMMARY -->
+                <section class="exec-summary">
+                    <h2>Executive Summary</h2>
+                    <p>
+                        My work at Victaulic occupies a unique, cross-functional niche that bridges the gap between
+                        hardware
+                        R&amp;D, lab testing, and global sales application engineering. By architecting centralized,
+                        configuration-driven software platforms, I enable the organization to scale its technical
+                        capabilities without incremental headcount. My primary focus is mitigating operational risk by
+                        modernizing legacy and tribal knowledge into robust, version-controlled applications. This
+                        transition reduces regressions to ad-hoc spreadsheet workflows and improves consistency in
+                        high-stakes engineering calculations and certification reporting across the R&amp;D, Lab, and
+                        Sales
+                        organizations.
+                    </p>
+                </section>
+
+                <!-- PILLAR 1 -->
+                <section>
+                    <div class="pillar-meta">
+                        <h2>Engineering System Automation &amp; Estimation</h2>
+                        <span class="pillar-value">Accelerating complex system design through the codification of tribal
+                            engineering knowledge into real-time validation engines.</span>
+                    </div>
+
+                    <div class="enabled-content">
+                        <span class="enabled-label">What was enabled</span>
+                        <p>
+                            Vortex project estimation was historically a manual, spreadsheet-driven process that
+                            required deep familiarity
+                            with design manuals, codes and standards, multi-step calculations, partcode lookups, and
+                            bill of material
+                            assembly. As project complexity increased, estimation time routinely stretched from hours to
+                            days.
+                        </p>
+                        <p>
+                            Over a multi-year evolution, I progressively automated this workflow by codifying
+                            engineering knowledge into
+                            software. Starting with the <strong>Vortex Estimator Tool</strong> prototype, I built the
+                            <strong>Vortex Configurator</strong> to eliminate hand-sizing for single-system projects and
+                            am now leading the
+                            <strong>Vortex Project Builder</strong>, which has completed internal testing and is staged
+                            for public release.
+                            The Builder scales to multi-system, multi-enclosure projects while enforcing valid
+                            configurations as scope
+                            grows.
+                        </p>
+                        <p>
+                            The impact is a step-change in efficiency. Work that once required days—or even a full
+                            week—of manual
+                            calculations can now be reduced to a five-minute conversation to determine system
+                            requirements. The Project
+                            Builder unifies calculations, standards compliance, real-time pricing, and system-specific
+                            BOM generation into
+                            a single customer-facing workflow.
+                        </p>
+                        <p>
+                            Development required close collaboration across engineering, project management, customer
+                            care, IT, and
+                            packaging, and includes full ownership of the real-time pricing database that powers all
+                            estimation outputs.
+                        </p>
+                    </div>
+
+
+                    <ul class="evidence-list">
+                        <li class="evidence-item">
+                            <span class="evidence-title">Vortex Project Builder</span>
+                            (Customer-facing platform for configuring and submitting complex multi-system
+                            projects)
+                        </li>
+                        <li class="evidence-item">
+                            <span class="evidence-title">Vortex Configurator</span>
+                            (Production tool that replaced manual hand-sizing for single-system estimates and pricing)
+                        </li>
+                        <li class="evidence-item">
+                            <span class="evidence-title">Vortex Estimator Tool</span>
+                            (Early prototype used to formalize calculation logic and BOM traceability)
+                        </li>
+                    </ul>
+
+                </section>
+
+                <!-- PILLAR 2 -->
+                <section>
+                    <div class="pillar-meta">
+                        <h2>Scalable Test &amp; Data Infrastructure</h2>
+                        <span class="pillar-value">
+                            Increasing R&amp;D throughput and confidence by replacing one-off test builds with reusable,
+                            configuration-driven data systems.
+                        </span>
+                    </div>
+
+                    <div class="enabled-content">
+                        <span class="enabled-label">What was enabled</span>
+                        <p>
+                            R&amp;D and customer testing historically relied on project-specific DAQ builds that limited
+                            lab throughput and consumed engineering capacity. Test setups were often tightly coupled to
+                            individual campaigns, making reuse, comparison, and certification workflows difficult to
+                            scale.
+                        </p>
+                        <p>
+                            I architected a <strong>configuration-driven DAQ platform</strong> that decouples test logic
+                            from
+                            hardware wiring and sensor selection. This approach enables the same core system to scale
+                            across
+                            customer campaigns, internal R&amp;D testing, and future certification cycles without
+                            requiring
+                            custom rebuilds.
+                        </p>
+                        <p>
+                            In parallel, I automated certification data pipelines to eliminate manual transcription.
+                            The <strong>UL Formatter</strong> pulls results directly from raw test outputs, producing
+                            auditable, repeatable reports and significantly reducing the risk of human error in
+                            high-stakes certification workflows.
+                        </p>
+                        <p>
+                            Together, these systems preserve critical lab capacity, improve repeatability, and increase
+                            confidence in data used for customer decisions and regulatory submissions.
+                        </p>
+                    </div>
+
+                    <ul class="evidence-list">
+                        <li class="evidence-item">
+                            <span class="evidence-title">Scalable DAQ Platform<br> (Bechtel Customer Testing)</span>
+                            (Reusable, configuration-driven LabVIEW architecture for campaign-based testing)
+                        </li>
+                        <li class="evidence-item">
+                            <span class="evidence-title">Vortex R&amp;D &amp; Test DAQ Support</span>
+                            (Ongoing lab infrastructure supporting internal development and validation)
+                        </li>
+                        <li class="evidence-item">
+                            <span class="evidence-title">UL Formatter</span>
+                            (Automated certification reporting pipeline sourced directly from raw test data)
+                        </li>
+                        <li class="evidence-item">
+                            <span class="evidence-title">Test Sheet Automation</span>
+                            (Self-service utilities for standardized lab validation and data review)
+                        </li>
+                    </ul>
+                </section>
+
+
+                <!-- PILLAR 3 -->
+                <section>
+                    <div class="pillar-meta">
+                        <h2>Engineering Enablement &amp; Workflow Modernization</h2>
+                        <span class="pillar-value">
+                            Reducing operational risk and knowledge silos by establishing durable,
+                            version-controlled engineering software practices.
+                        </span>
+                    </div>
+
+                    <div class="enabled-content">
+                        <span class="enabled-label">What was enabled</span>
+                        <p>
+                            As internally developed engineering tools expanded in scope and impact, the limitations of
+                            spreadsheet-based distribution and ad-hoc file sharing became a growing source of risk.
+                            Updates were difficult to track, logic changes were hard to audit, and long-term ownership
+                            was unclear.
+                        </p>
+                        <p>
+                            I advised and supported the team in adopting <strong>Git and GitHub</strong> as a modern
+                            version-control foundation for engineering software. This included guiding best practices
+                            around repository structure, change tracking, and collaborative workflows, while working
+                            alongside others who executed the implementation.
+                        </p>
+                        <p>
+                            In coordination with IT, I also helped establish a controlled publishing path for internal
+                            engineering tools. This ensured that deployed applications are <strong>traceable,
+                                maintainable,
+                                and resilient to personnel changes</strong>, significantly reducing the long-term “bus
+                            factor”
+                            associated with legacy workflows.
+                        </p>
+                    </div>
+
+                    <ul class="evidence-list">
+                        <li class="evidence-item">
+                            <span class="evidence-title">Git &amp; GitHub Adoption</span>
+                            (Advisory leadership on version control strategy and best practices)
+                        </li>
+                        <li class="evidence-item">
+                            <span class="evidence-title">IT Domain Integration</span>
+                            (Controlled publishing and distribution model for internal engineering tools)
+                        </li>
+                    </ul>
+                </section>
+
+
+                <!-- PILLAR 4 -->
+                <section>
+                    <div class="pillar-meta">
+                        <h2>Innovation Research &amp; Technical Risk Reduction</h2>
+                        <span class="pillar-value">
+                            Reducing uncertainty in future hardware and tooling investments through targeted feasibility
+                            research and low-level prototyping.
+                        </span>
+                    </div>
+
+                    <div class="enabled-content">
+                        <span class="enabled-label">What was enabled</span>
+                        <p>
+                            To inform future tool and automation investments, I conducted feasibility research into
+                            computer vision, LiDAR, and embedded control systems. This work focused on evaluating
+                            technical viability before committing to production development.
+                        </p>
+                        <p>
+                            Through <strong>RG5200i Pipe Detection Research</strong>, I explored both machine learning–
+                            based approaches and LiDAR point-cloud workflows to detect pipe geometry and alignment.
+                            This included training and evaluating detection models as well as assessing the practical
+                            limits of point-cloud–based analysis in industrial environments.
+                        </p>
+                        <p>
+                            Separately, I conducted <strong>Stepper Motor Control Loop Research</strong> to evaluate
+                            low-level motion control as a potential in-house alternative for future systems.
+                            This effort focused on <strong>C++ development, embedded control logic, and direct
+                                board-level communication</strong>, expanding internal understanding of real-time
+                            control
+                            constraints without committing to productization.
+                        </p>
+                        <p>
+                            These efforts reduced technical uncertainty, expanded internal capability, and provided
+                            concrete data to inform future investment decisions.
+                        </p>
+                    </div>
+
+                    <ul class="evidence-list">
+                        <li class="evidence-item">
+                            <span class="evidence-title">RG5200i Pipe Detection Research</span>
+                            (ML-based and LiDAR-based feasibility exploration for pipe detection)
+                        </li>
+                        <li class="evidence-item">
+                            <span class="evidence-title">Stepper Motor Control Loop Research</span>
+                            (C++ embedded control and board communication feasibility study)
+                        </li>
+                    </ul>
+                </section>
+
+
+                <!-- PILLAR 5 -->
+                <section>
+                    <div class="pillar-meta">
+                        <h2>Decision Support &amp; Field Enablement Tools</h2>
+                        <span class="pillar-value">
+                            Accelerating Sales and Field response times by removing recurring engineering bottlenecks
+                            from high-frequency decision workflows.
+                        </span>
+                    </div>
+
+                    <div class="enabled-content">
+                        <span class="enabled-label">What was enabled</span>
+                        <p>
+                            Sales and Field teams frequently require rapid confirmation of product compatibility,
+                            installation constraints, and system fit. Historically, these questions interrupted
+                            engineering teams and relied on manual lookups, informal guidance, or ad-hoc validation.
+                        </p>
+                        <p>
+                            I delivered <strong>self-service decision support tools</strong> that decouple routine
+                            compatibility checks from engineering availability. By automating the extraction and
+                            validation of configuration constraints, these tools provide immediate, data-backed
+                            answers while preserving engineering capacity for higher-complexity work.
+                        </p>
+                        <p>
+                            The <strong>VicFlex Bracket Filter</strong> transforms SolidWorks-derived compatibility
+                            data into an intuitive configuration workflow, allowing Sales and Field users to verify
+                            valid combinations with visual confirmation. This improves response time, reduces error
+                            risk, and increases customer confidence through validated constraints rather than
+                            informal guidance.
+                        </p>
+                        <p>
+                            Collectively, these tools <strong>reduce recurring workflow interruptions</strong>,
+                            shorten sales cycles, and ensure consistent application of engineering rules across
+                            customer-facing interactions.
+                        </p>
+                    </div>
+
+                    <ul class="evidence-list">
+                        <li class="evidence-item">
+                            <span class="evidence-title">VicFlex Bracket Filter</span>
+                            (Automated compatibility configuration and validation system)
+                        </li>
+                    </ul>
+                </section>
+
+
+                <!-- APPENDIX -->
+                <section>
+                    <h2>Technical Reference Appendix</h2>
+                    <div class="glossary-grid">
+                        <div class="glossary-cat">
+                            <h3>Architecture &amp; Frontend</h3>
+                            <ul class="glossary-list">
+                                <li>React / Next.js</li>
+                                <li>Electron</li>
+                                <li>TypeScript</li>
+                                <li>Tailwind CSS</li>
+                                <li>CustomTkinter</li>
+                            </ul>
+                        </div>
+                        <div class="glossary-cat">
+                            <h3>Automation &amp; Data</h3>
+                            <ul class="glossary-list">
+                                <li>Python</li>
+                                <li>Pandas / NumPy</li>
+                                <li>ExcelJS / XLSX Data I/O</li>
+                                <li>Python-Docx</li>
+                                <li>JSON Schema (Ajv)</li>
+                            </ul>
+                        </div>
+                        <div class="glossary-cat">
+                            <h3>Industrial &amp; Vision</h3>
+                            <ul class="glossary-list">
+                                <li>LabVIEW (DAQmx)</li>
+                                <li>NI TDMS</li>
+                                <li>C++ (Embedded / PID)</li>
+                                <li>Nucleo-F401RE / Powerstep01</li>
+                                <li>YOLOv5 / PyTorch</li>
+                                <li>OpenCV</li>
+                            </ul>
+                        </div>
+                        <div class="glossary-cat">
+                            <h3>Systems &amp; Infrastructure</h3>
+                            <ul class="glossary-list">
+                                <li>Git / GitHub</li>
+                                <li>Shell Scripting</li>
+                                <li>IT Domain Integration</li>
+                                <li>OrbbecSDK (Vision)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <div class="closing-box">
+                    <p>
+                        This body of work reflects a sustained focus on building systems that scale Victaulic’s
+                        engineering capability, mitigate technical risk, and create long-term value beyond individual
+                        projects. My ability to bridge deep technical hardware testing with modern, version-controlled
+                        software architecture demonstrates readiness for increased architectural ownership and scope
+                        across the organization.
+                    </p>
+                </div>
+            </main>
+        </div>
+    </div>
+    <script>
+        function expandAllTimelines() {
+            document.querySelectorAll(".timeline-item").forEach((item) => {
+                item.classList.add("expanded");
+            });
+        }
+
+        function collapseAllTimelines() {
+            document.querySelectorAll(".timeline-item").forEach((item) => {
+                item.classList.remove("expanded");
+            });
+        }
+    </script>
+
+</body>
+
+</html>
